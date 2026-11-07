@@ -1,0 +1,25 @@
+{
+  "_comment": "Copy to ./bwtidy.json (or set BWTIDY_CONFIG). Every key is optional. Values here match examples/sample-vault.json.",
+  "decommissioned": {
+    "legacy-iptv": "IPTV - replaced by a streaming service"
+  },
+  "dead_domains": [
+    "shut-down-store.example"
+  ],
+  "dns_false_positives": [
+    "microsoftonline.com"
+  ],
+  "private_host": {
+    "suffix": "home.arpa",
+    "live_ports": [
+      443,
+      8443
+    ]
+  },
+  "add_url": {
+    "Corner Shop": "https://shop.example.com"
+  },
+  "to_note": [
+    "Laptop recovery key"
+  ]
+}

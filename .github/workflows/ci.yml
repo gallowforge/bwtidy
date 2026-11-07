@@ -1,0 +1,31 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Python syntax
+        run: python3 -m py_compile *.py tests/*.py tests/bin/bw
+
+      - name: Shell syntax and ShellCheck
+        run: |
+          files=$(git ls-files '*.sh')
+          if [ -n "$files" ]; then
+            bash -n $files
+            shellcheck --severity=error $files
+          else
+            echo "no shell scripts"
+          fi
+
+      - name: End-to-end tests (fake bw, fake LM Studio, synthetic vault)
+        run: python3 -m unittest discover -s tests -v

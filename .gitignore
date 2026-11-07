@@ -1,0 +1,6 @@
+# Everything the scripts write contains vault data. Never commit it.
+*.json
+!examples/*.json
+cleanup.md
+backup-*
+__pycache__/

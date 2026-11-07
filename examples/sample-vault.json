@@ -1,0 +1,368 @@
+{
+  "_comment": "Synthetic vault for tests and demos. Every item, username and password here is fake.",
+  "folders": [
+    {
+      "object": "folder",
+      "id": "6f1d2c3e-0000-4000-8000-00000000f001",
+      "name": "Financial"
+    },
+    {
+      "object": "folder",
+      "id": "6f1d2c3e-0000-4000-8000-00000000f002",
+      "name": "Misc"
+    }
+  ],
+  "items": [
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000001",
+      "type": 1,
+      "name": "github.com",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "Tr4in-Lamp-Orbit-Velvet-92",
+        "totp": "JBSWY3DPEHPK3PXP",
+        "uris": [
+          {
+            "uri": "https://github.com/login",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000002",
+      "type": 1,
+      "name": "GitHub (copy)",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "Tr4in-Lamp-Orbit-Velvet-92",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://github.com",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000003",
+      "type": 1,
+      "name": "PayPal",
+      "folderId": "6f1d2c3e-0000-4000-8000-00000000f001",
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "hunter22",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://www.paypal.com",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000004",
+      "type": 1,
+      "name": "Amazon",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "Summer2019!",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://www.amazon.com",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000005",
+      "type": 1,
+      "name": "Reddit",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex_r",
+        "password": "Summer2019!",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://www.reddit.com",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000006",
+      "type": 1,
+      "name": "Amazon (old)",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "Amz-Old-Pass-77x!",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://amazon.com/ap/signin",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000007",
+      "type": 1,
+      "name": "Netflix",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "Q9v!mK2#pL7z@Wn4",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://www.netflix.com",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000008",
+      "type": 1,
+      "name": "Router admin",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "admin",
+        "password": "admin-local-81!",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "http://10.0.0.1",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000009",
+      "type": 1,
+      "name": "Old Forum",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex",
+        "password": "forumpass",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://forum.example.org",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2019-03-02T18:30:00.000Z",
+      "revisionDate": "2019-03-02T18:30:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000010",
+      "type": 1,
+      "name": "Legacy IPTV",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex",
+        "password": "Iptv-Box-2022-zz",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://portal.legacy-iptv.example",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000011",
+      "type": 1,
+      "name": "NAS (old port)",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "admin",
+        "password": "Nas-Admin-Pass-4410",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://nas.home.arpa:8447",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000012",
+      "type": 1,
+      "name": "Laptop recovery key",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": null,
+        "password": "ABCD-EFGH-IJKL-MNOP",
+        "totp": null,
+        "uris": []
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000013",
+      "type": 1,
+      "name": "Corner Shop",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex",
+        "password": "Corner-Shop-5512!",
+        "totp": null,
+        "uris": []
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000014",
+      "type": 1,
+      "name": "Personal mail",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "M4il-Strong-Passphrase-01",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://mail.example.com",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000015",
+      "type": 1,
+      "name": "Shut Down Store",
+      "folderId": null,
+      "notes": null,
+      "favorite": false,
+      "fields": [],
+      "login": {
+        "username": "alex@example.com",
+        "password": "Gone-Store-Pass-31!",
+        "totp": null,
+        "uris": [
+          {
+            "uri": "https://shut-down-store.example",
+            "match": null
+          }
+        ]
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    },
+    {
+      "object": "item",
+      "id": "0b5e7a10-0000-4000-8000-000000000016",
+      "type": 2,
+      "name": "Wi-Fi",
+      "folderId": null,
+      "notes": "SSID: example-net",
+      "favorite": false,
+      "fields": [],
+      "login": null,
+      "secureNote": {
+        "type": 0
+      },
+      "creationDate": "2026-03-14T09:00:00.000Z",
+      "revisionDate": "2026-03-14T09:00:00.000Z"
+    }
+  ]
+}

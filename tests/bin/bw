@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+"""
+Fake `bw` CLI for tests and demos. Implements only the subcommands bwtidy uses,
+against a JSON state file ({"folders": [...], "items": [...]}) named by
+$BW_FAKE_VAULT. Trashed items keep a deletedDate and are hidden from
+`list items`, like the real CLI. Never touches a real vault.
+"""
+import base64
+import datetime as dt
+import json
+import os
+import sys
+import uuid
+
+
+def now():
+    return dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+
+
+def fail(msg):
+    print(msg, file=sys.stderr)
+    sys.exit(1)
+
+
+def main():
+    path = os.environ.get("BW_FAKE_VAULT")
+    if not path:
+        fail("BW_FAKE_VAULT is not set")
+    args, skip = [], False
+    for a in sys.argv[1:]:
+        if skip:
+            skip = False
+        elif a == "--session":
+            skip = True
+        elif a != "--nointeraction":
+            args.append(a)
+
+    with open(path) as f:
+        state = json.load(f)
+    items, folders = state["items"], state["folders"]
+    state.setdefault("counter", 0)
+
+    def new_id():
+        state["counter"] += 1
+        return str(uuid.uuid5(uuid.NAMESPACE_URL, f"bwtidy-fake/{state['counter']}"))
+
+    def find(iid):
+        for it in items:
+            if it["id"] == iid:
+                return it
+        fail("Not found.")
+
+    def decode(b64):
+        return json.loads(base64.b64decode(b64))
+
+    out = None
+    match args:
+        case ["list", "items"]:
+            out = [it for it in items if not it.get("deletedDate")]
+        case ["list", "folders"]:
+            out = folders + [{"object": "folder", "id": None, "name": "No Folder"}]
+        case ["create", "folder", b64]:
+            out = {"object": "folder", "id": new_id(), "name": decode(b64)["name"]}
+            folders.append(out)
+        case ["delete", "folder", fid]:
+            if not any(f["id"] == fid for f in folders):
+                fail("Not found.")
+            state["folders"] = [f for f in folders if f["id"] != fid]
+            for it in items:
+                if it.get("folderId") == fid:
+                    it["folderId"] = None
+        case ["create", "item", b64]:
+            out = decode(b64)
+            out.update({"object": "item", "id": new_id(), "revisionDate": now()})
+            items.append(out)
+        case ["edit", "item", iid, b64]:
+            it = find(iid)
+            if it.get("deletedDate"):
+                fail("Item is in the trash.")
+            new = decode(b64)
+            new.update({"id": iid, "revisionDate": now()})
+            items[items.index(it)] = new
+            out = new
+        case ["delete", "item", iid]:
+            find(iid)["deletedDate"] = now()
+        case ["restore", "item", iid]:
+            it = find(iid)
+            if not it.get("deletedDate"):
+                fail("Item is not in the trash.")
+            it.pop("deletedDate")
+        case ["sync"]:
+            print("Syncing complete.")
+        case _:
+            fail(f"fake bw: unsupported command: {' '.join(args)}")
+
+    with open(path, "w") as f:
+        json.dump(state, f, indent=2)
+    if out is not None:
+        print(json.dumps(out))
+
+
+if __name__ == "__main__":
+    main()
