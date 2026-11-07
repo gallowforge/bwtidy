@@ -17,15 +17,18 @@ MODEL = "mistralai_mistral-small-3.2-24b-instruct-2506"
 RULES = [
     (r"github|gitlab|npm", "Development"),
     (r"paypal|bank|card", "Financial"),
+    (r"steam", "Gaming"),
     (r"amazon|shop|store", "Shopping"),
-    (r"netflix|iptv|stream", "Entertainment"),
     (r"reddit|forum", "Social"),
-    (r"router|nas|10\.0\.|home\.arpa", "Infrastructure"),
+    (r"router|nas|webhost|10\.0\.|home\.arpa", "Infrastructure"),
     (r"mail", "Email"),
 ]
 
+# Every chat request body received, so tests can prove what reaches the model.
+REQUESTS = []
+
 BRANDS = {"github": "GitHub", "paypal": "PayPal", "amazon": "Amazon",
-          "reddit": "Reddit", "netflix": "Netflix"}
+          "reddit": "Reddit", "steam": "Steam"}
 
 
 def classify(line):
@@ -75,6 +78,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_POST(self):
         length = int(self.headers.get("Content-Length", 0))
         payload = json.loads(self.rfile.read(length))
+        REQUESTS.append(payload)
         content = json.dumps(answer(payload))
         self._send({"choices": [{"message": {"role": "assistant", "content": content}}]})
 

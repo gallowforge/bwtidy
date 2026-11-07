@@ -24,6 +24,41 @@ CONFIG = os.path.join(ROOT, "examples", "bwtidy.example.json")
 VOLATILE = {"revisionDate", "deletedDate"}
 
 
+# Loaded into every script through PYTHONPATH by test_no_network_egress. Any
+# connection or name lookup that is not loopback is logged and refused.
+EGRESS_GUARD = """
+import ipaddress, os, socket
+
+def _local(host):
+    host = str(host).split("%")[0]
+    if host == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(host).is_loopback
+    except ValueError:
+        return False
+
+def _block(what, host):
+    with open(os.environ["BWTIDY_EGRESS_LOG"], "a") as f:
+        f.write(f"{what} {host}\\n")
+    raise OSError(f"egress blocked by test: {what} {host}")
+
+_connect, _resolve = socket.socket.connect, socket.getaddrinfo
+
+def connect(self, address):
+    if self.family in (socket.AF_INET, socket.AF_INET6) and not _local(address[0]):
+        _block("connect", address[0])
+    return _connect(self, address)
+
+def getaddrinfo(host, *args, **kwargs):
+    if host is not None and not _local(host):
+        _block("resolve", host)
+    return _resolve(host, *args, **kwargs)
+
+socket.socket.connect, socket.getaddrinfo = connect, getaddrinfo
+"""
+
+
 def stable(item):
     return {k: v for k, v in item.items() if k not in VOLATILE}
 
@@ -74,8 +109,9 @@ class E2E(unittest.TestCase):
 
     def test_audit_flags_and_never_prints_passwords(self):
         out = self.run_script("bwaudit.py")
-        self.assertIn("REUSED PASSWORDS  (2 password(s) shared across 4 entries)", out)
-        self.assertIn("NO SECOND FACTOR ON A CRITICAL ACCOUNT  (1)", out)
+        self.assertIn("REUSED PASSWORDS  (3 password(s) shared across 6 entries)", out)
+        self.assertIn("<< includes a critical account", out)
+        self.assertIn("NO SECOND FACTOR ON A CRITICAL ACCOUNT  (2)", out)
         self.assertIn("NOT TOUCHED IN 3+ YEARS  (1)", out)
         for pw in self.passwords():
             self.assertNotIn(pw, out)
@@ -92,7 +128,7 @@ class E2E(unittest.TestCase):
         with open(os.path.join(self.dir, "cleanup.md")) as f:
             md = f.read()
         self.assertIn("**GitHub (copy)** — exact duplicate", md)
-        self.assertIn("**Legacy IPTV** — IPTV - replaced by a streaming service", md)
+        self.assertIn("**Old Webhost** — moved to a new hosting provider", md)
         self.assertIn("port 8447 is no longer served on home.arpa", md)
         self.assertIn("**Router admin** — local address", md)
         self.assertEqual(before, self.live()[0], "bwdead must not change the vault")
@@ -118,7 +154,7 @@ class E2E(unittest.TestCase):
         self.run_script("bwtidy.py", "plan")
         items, state = self.live()
         for it in state["items"]:
-            if it["name"] == "Netflix":
+            if it["name"] == "Steam":
                 it["login"]["password"] = "changed"
         with open(self.vault, "w") as f:
             json.dump(state, f)
@@ -144,7 +180,7 @@ class E2E(unittest.TestCase):
         names = {it["name"] for it in items.values()}
         self.assertEqual(len(items), len(before) - 3)
         self.assertNotIn("GitHub (copy)", names)
-        self.assertNotIn("Legacy IPTV", names)
+        self.assertNotIn("Old Webhost", names)
         self.assertNotIn("Shut Down Store", names)
         keep = next(it for it in items.values() if it["name"] == "github.com")
         self.assertEqual(len(keep["login"]["uris"]), 2)
@@ -167,6 +203,50 @@ class E2E(unittest.TestCase):
         self.assertNotIn("Misc", {f["name"] for f in state["folders"]})
 
     # ---- safety rails ------------------------------------------------------
+
+    def secrets(self):
+        with open(SAMPLE) as f:
+            items = json.load(f)["items"]
+        out = [i["notes"] for i in items if i.get("notes")]
+        for i in items:
+            lg = i.get("login") or {}
+            out += [v for v in (lg.get("password"), lg.get("totp")) if v]
+        return out
+
+    def test_model_never_receives_secrets(self):
+        fake_lmstudio.REQUESTS.clear()
+        self.run_script("bwtidy.py", "plan")
+        self.run_script("bwrename.py", "plan")
+        self.run_script("bwtidy.py", "apply")
+        self.run_script("bwfinal.py", "plan")          # reclassifies Uncategorized
+        kinds = [r["response_format"]["json_schema"]["name"] for r in fake_lmstudio.REQUESTS]
+        self.assertEqual(sorted(set(kinds)), ["assignments", "renames"])
+        self.assertGreaterEqual(len(kinds), 3)
+        sent = "\n".join(m["content"] for r in fake_lmstudio.REQUESTS for m in r["messages"])
+        self.assertIn("github.com", sent)              # metadata does reach the model
+        for secret in self.secrets():
+            self.assertNotIn(secret, sent)
+
+    def test_no_network_egress(self):
+        guard = os.path.join(self.dir, "guard")
+        os.mkdir(guard)
+        log = os.path.join(self.dir, "egress.log")
+        with open(os.path.join(guard, "sitecustomize.py"), "w") as f:
+            f.write(EGRESS_GUARD)
+        env = dict(self.env, PYTHONPATH=guard, BWTIDY_EGRESS_LOG=log)
+        steps = [("bwaudit.py",), ("bwdupes.py",), ("bwdead.py",),
+                 ("bwtidy.py", "plan"), ("bwtidy.py", "apply"), ("bwtidy.py", "verify"),
+                 ("bwtidy.py", "revert"), ("bwrename.py", "plan"), ("bwfix.py", "--dry"),
+                 ("bwrename.py", "apply"), ("bwrename.py", "revert"),
+                 ("bwmerge.py", "plan"), ("bwmerge.py", "apply"), ("bwpolish.py",),
+                 ("bwmerge.py", "restore"), ("bwfinal.py", "plan"), ("bwfinal.py", "apply")]
+        for step in steps:
+            self.run_script(*step, env=env)
+        self.assertFalse(os.path.exists(log), "a script tried to reach a non-loopback host")
+        # The guard itself works: the opt-in DNS check is caught by it.
+        self.run_script("bwdead.py", "--dns", env=env)
+        with open(log) as f:
+            self.assertIn("resolve github.com", f.read())
 
     def test_refuses_remote_llm(self):
         env = dict(self.env, LMSTUDIO_URL="http://203.0.113.10:1234/v1")

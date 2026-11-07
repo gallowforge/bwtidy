@@ -8,6 +8,11 @@
     },
     {
       "object": "folder",
+      "id": "6f1d2c3e-0000-4000-8000-00000000f003",
+      "name": "Email"
+    },
+    {
+      "object": "folder",
       "id": "6f1d2c3e-0000-4000-8000-00000000f002",
       "name": "Misc"
     }
@@ -155,7 +160,7 @@
       "object": "item",
       "id": "0b5e7a10-0000-4000-8000-000000000007",
       "type": 1,
-      "name": "Netflix",
+      "name": "Steam",
       "folderId": null,
       "notes": null,
       "favorite": false,
@@ -166,7 +171,7 @@
         "totp": null,
         "uris": [
           {
-            "uri": "https://www.netflix.com",
+            "uri": "https://store.steampowered.com",
             "match": null
           }
         ]
@@ -208,7 +213,7 @@
       "fields": [],
       "login": {
         "username": "alex",
-        "password": "forumpass",
+        "password": "hunter22",
         "totp": null,
         "uris": [
           {
@@ -224,18 +229,18 @@
       "object": "item",
       "id": "0b5e7a10-0000-4000-8000-000000000010",
       "type": 1,
-      "name": "Legacy IPTV",
+      "name": "Old Webhost",
       "folderId": null,
       "notes": null,
       "favorite": false,
       "fields": [],
       "login": {
         "username": "alex",
-        "password": "Iptv-Box-2022-zz",
+        "password": "Webhost-Panel-2022-zz",
         "totp": null,
         "uris": [
           {
-            "uri": "https://portal.legacy-iptv.example",
+            "uri": "https://panel.old-webhost.example",
             "match": null
           }
         ]
@@ -307,7 +312,7 @@
       "id": "0b5e7a10-0000-4000-8000-000000000014",
       "type": 1,
       "name": "Personal mail",
-      "folderId": null,
+      "folderId": "6f1d2c3e-0000-4000-8000-00000000f003",
       "notes": null,
       "favorite": false,
       "fields": [],
@@ -317,7 +322,7 @@
         "totp": null,
         "uris": [
           {
-            "uri": "https://mail.example.com",
+            "uri": "https://mail.proton.me",
             "match": null
           }
         ]

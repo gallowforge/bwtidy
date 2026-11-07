@@ -15,7 +15,7 @@ jobs:
           python-version: "3.12"
 
       - name: Python syntax
-        run: python3 -m py_compile *.py tests/*.py tests/bin/bw
+        run: python3 -m py_compile *.py tests/*.py tests/bin/bw scripts/*.py
 
       - name: Shell syntax and ShellCheck
         run: |

@@ -1,7 +1,7 @@
 {
   "_comment": "Copy to ./bwtidy.json (or set BWTIDY_CONFIG). Every key is optional. Values here match examples/sample-vault.json.",
   "decommissioned": {
-    "legacy-iptv": "IPTV - replaced by a streaming service"
+    "old-webhost": "moved to a new hosting provider"
   },
   "dead_domains": [
     "shut-down-store.example"
