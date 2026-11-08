@@ -1,7 +1,7 @@
 <a href="#quickstart">
   <picture>
     <source media="(max-width: 700px)" srcset="docs/readme/hero-mobile.webp" />
-    <img src="docs/readme/hero.webp" width="100%" alt="bwtidy: audit and tidy your vault, nothing leaves your machine. A terminal shows bwaudit.py finding three groups of reused passwords on a synthetic vault, one of them including a PayPal login, next to a summary of 13 findings across 16 items." />
+    <img src="docs/readme/hero.webp" width="100%" alt="bwtidy: every key back on its hook. A key board drawn from a real audit of a synthetic vault: the PayPal key and the Old Forum key have the same cut, Old Forum is under a cobweb after 7.7 untouched years, github.com hangs with its exact duplicate, and Personal mail's lock is missing its second bolt. A terminal shows bwaudit.py flagging 13 items and changing nothing." />
   </picture>
 </a>
 
@@ -19,22 +19,22 @@
 
 <p align="center">
   <a href="https://github.com/gallowforge/bwtidy/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/gallowforge/bwtidy/actions/workflows/ci.yml/badge.svg" /></a>
-  <img alt="12 end-to-end tests passing" src="https://img.shields.io/badge/tests-12_passing-2dd4bf?labelColor=0f1217" />
-  <img alt="Runs local only" src="https://img.shields.io/badge/runs-local--only-2dd4bf?labelColor=0f1217" />
-  <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-2dd4bf?labelColor=0f1217" />
-  <img alt="Python 3.10 or newer" src="https://img.shields.io/badge/python-3.10%2B-2dd4bf?labelColor=0f1217" />
-  <img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-9aa1ad?labelColor=0f1217" />
+  <img alt="12 end-to-end tests passing" src="https://img.shields.io/badge/tests-12_passing-2f8f6b?labelColor=162024" />
+  <img alt="Runs local only" src="https://img.shields.io/badge/runs-local--only-2f8f6b?labelColor=162024" />
+  <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-none-2f8f6b?labelColor=162024" />
+  <img alt="Python 3.10 or newer" src="https://img.shields.io/badge/python-3.10%2B-2f8f6b?labelColor=162024" />
+  <img alt="MIT licence" src="https://img.shields.io/badge/licence-MIT-b5832c?labelColor=162024" />
 </p>
 
 <br />
 
-A password vault that has grown for years is full of things you cannot see from the app: the same password on your bank and an old forum, logins with no second factor, three copies of one account, services that shut down long ago. Fixing it by hand is slow, and the tools that promise to help want your vault on someone else's computer.
+A password vault that has grown for years is a drawer of keys nobody has sorted: the same password on your bank and an old forum, logins with no second factor, three copies of one account, services that shut down long ago. None of it shows in the app. Fixing it by hand is slow, and the tools that promise to help want your vault on someone else's computer.
 
 **bwtidy audits and tidies a Bitwarden or Vaultwarden vault on your own machine.** It finds reused and weak passwords, missing 2FA, duplicates and dead entries, and has a local model propose folders and names. Every change is a plan you can read first, applied only when you say so, and reversible afterwards. It is nine small Python scripts on the standard library and the official `bw` CLI.
 
 <picture>
   <source media="(max-width: 700px)" srcset="docs/readme/numbers-mobile.webp" />
-  <img src="docs/readme/numbers.webp" width="100%" alt="9 single-purpose scripts, 5 health checks before any change, 12 end-to-end tests on a synthetic vault, 0 dependencies, 0 secrets sent to the local model, and 0 calls off the machine, proven by a test." />
+  <img src="docs/readme/numbers.webp" width="100%" alt="Six hotel key fobs on a rail: 9 scripts, one job each; 5 health checks before any change; 12 tests passing, end to end on a synthetic vault; 0 dependencies, standard library only; 0 secrets sent to the local model; 0 calls off the machine, proven by a test." />
 </picture>
 
 <br />
@@ -50,7 +50,7 @@ A password vault that has grown for years is full of things you cannot see from 
 
 <picture>
   <source media="(max-width: 700px)" srcset="docs/readme/audit-mobile.webp" />
-  <img src="docs/readme/audit.webp" width="100%" alt="The full bwaudit.py report on the synthetic vault: three reused-password groups, five weak passwords, two critical accounts without 2FA, two logins without a website and one entry untouched for 7.7 years, next to a card explaining the five checks." />
+  <img src="docs/readme/audit.webp" width="100%" alt="13 findings, zero judgement. The full bwaudit.py report on the synthetic vault, next to a field guide that draws each finding as it looks on the key board: reused passwords as keys with the same cut (3 groups, 6 entries), weak passwords as flimsy keys (5), no 2FA on a critical account as a lock missing its second bolt (2), no website as a tag with a blank address (2), and an entry untouched for 3+ years under a cobweb (1)." />
 </picture>
 
 ## Find the dead weight
@@ -63,7 +63,7 @@ A password vault that has grown for years is full of things you cannot see from 
 
 <picture>
   <source media="(max-width: 700px)" srcset="docs/readme/dead-mobile.webp" />
-  <img src="docs/readme/dead.webp" width="100%" alt="The cleanup.md checklist from bwdead.py --dns: one exact duplicate, four entries whose domains no longer resolve, and one local address, beside the terminal summary and a card explaining the opt-in DNS check." />
+  <img src="docs/readme/dead.webp" width="100%" alt="Lost and found. A cardboard box with one compartment per tier: A, the exact duplicate GitHub (copy); B, four entries whose domains no longer resolve; E, the local Router admin address. Beside it, the real cleanup.md checklist with the evidence for each entry, and the bwdead.py --dns summary: 16 items, 6 flagged, nothing deleted." />
 </picture>
 
 ## Merge duplicates without losing a byte
@@ -77,7 +77,7 @@ A password vault that has grown for years is full of things you cannot see from 
 
 <picture>
   <source media="(max-width: 700px)" srcset="docs/readme/merge-mobile.webp" />
-  <img src="docs/readme/merge.webp" width="100%" alt="bwmerge.py plan and apply on the synthetic vault: GitHub (copy) is merged into github.com, which keeps both URLs and its TOTP seed, two dead entries go to the trash, and bwpolish.py confirms every URL, TOTP seed and note was preserved. A diff card shows the plan, including the Amazon pair it leaves alone." />
+  <img src="docs/readme/merge.webp" width="100%" alt="Two keys, one door. Before: github.com and GitHub (copy) hang as identical keys, each with its own address tag. After: one key carries both tags and keeps its TOTP seed. GitHub (copy), Old Webhost and Shut Down Store go into the trash, not purged, and the Amazon pair with different cuts is left alone. The terminal shows bwmerge.py plan and apply, bwpolish.py confirming every URL, TOTP seed and note was preserved, and the owner-only backup file." />
 </picture>
 
 ## Let a local model sort the folders
@@ -91,7 +91,7 @@ A password vault that has grown for years is full of things you cannot see from 
 
 <picture>
   <source media="(max-width: 700px)" srcset="docs/readme/folders-mobile.webp" />
-  <img src="docs/readme/folders.webp" width="100%" alt="bwtidy.py plan proposes moving 14 of 16 items into folders such as Shopping, Infrastructure and Development; apply moves them and verify passes. A card shows the one line sent to 127.0.0.1 for an item and the JSON returned, and a before-and-after folder tree." />
+  <img src="docs/readme/folders.webp" width="100%" alt="Fourteen keys on one hook? Before: 14 keys bunched on the No Folder hook. After: every item on a labelled rail, Shopping 4, Infrastructure 3, Development 2, Social 2, Uncategorized 2, Email 1, Financial 1, Gaming 1, and an empty Misc. Below, the one line sent to 127.0.0.1 for Steam and the JSON returned, and bwtidy.py apply and verify passing." />
 </picture>
 
 The folder demo uses the deterministic stand-in for LM Studio from the test suite, which answers with keyword rules but speaks the same API. With LM Studio itself, the default model is Mistral Small 3.2 24B.
@@ -106,10 +106,10 @@ Nothing writes to your vault without a plan you can read first, and every write 
 
 <picture>
   <source media="(max-width: 700px)" srcset="docs/readme/flow-mobile.webp" />
-  <img src="docs/readme/flow.webp" width="100%" alt="The plan, review, apply, verify and undo flow, with real output under each guarantee: verify passing, a non-loopback model address refused, plan and backup files with mode 600, and three items moved to the trash." />
+  <img src="docs/readme/flow.webp" width="100%" alt="Tidy first, then prove nothing broke. A chore card ticks off plan, review, apply and verify with the real output of each step, a brass UNDO tag hangs beside it with bwtidy.py revert putting 14 items back, and two proofs sit on the left: a non-loopback model address refused, and plan, fingerprint and backup files created with mode 600." />
 </picture>
 
-Every terminal in this README is real output from running the scripts on the synthetic vault in [`examples/`](examples), through the fake `bw` and the stand-in model in [`tests/`](tests). Regenerate the images with `python3 scripts/readme_visuals.py`.
+Every name, number and terminal line in these images is real output from running the scripts on the synthetic vault in [`examples/`](examples), through the fake `bw` and the stand-in model in [`tests/`](tests). The key board is drawn in code from that output: keys that share a password share a cut, weak passwords are flimsy keys, and every item is the same key in every picture. Regenerate the images with `python3 scripts/readme_visuals.py`.
 
 ## Why it is different
 
