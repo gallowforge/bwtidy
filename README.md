@@ -14,7 +14,7 @@
   &nbsp;·&nbsp;
   <a href="#under-the-hood">How it works</a>
   &nbsp;·&nbsp;
-  <a href="https://gallowforge.github.io">Portfolio</a>
+  <a href="https://gallowforge.github.io">More projects</a>
 </p>
 
 <p align="center">
