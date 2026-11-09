@@ -4,3 +4,6 @@
 cleanup.md
 backup-*
 __pycache__/
+
+# README image build output (textures and frames)
+docs/readme/.build/

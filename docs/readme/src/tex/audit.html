@@ -1,0 +1,59 @@
+<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="tex.css"><body class="term " style="width:720px;--hi:#6fe6d8;--hi-day:#0b7d72;--ok:#6fe6d8;--warn:#f0c674">
+<div class="l"><span class="p">$</span> <span class="c">python3 bwaudit.py</span></div>
+<div class="l">Scanned 16 items (15 with passwords) across 4 folders.</div>
+<div class="l">No password is printed anywhere in this report.</div>
+<div class="l"> </div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l">REUSED PASSWORDS  (3 password(s) shared across 6 entries)</div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l">Fix top-down. Breaking one of these breaks every entry in its group.</div>
+<div class="l"> </div>
+<div class="l">  Group 1 - 2 entries</div>
+<div class="l">      github.com                               <span class="d">[No Folder]</span></div>
+<div class="l">      GitHub (copy)                            <span class="d">[No Folder]</span></div>
+<div class="l"> </div>
+<div class="lifted" style="margin:10px 0 22px"><div data-lift="group" style="display:inline-block"><div class="l">  Group 2 - 2 entries   <span class="w">&lt;&lt; includes a critical account</span></div><div class="l">      PayPal                                   <span class="d">[Financial]</span></div><div class="l">      Old Forum                                <span class="d">[No Folder]</span></div></div></div>
+<div class="l"> </div>
+<div class="l">  Group 3 - 2 entries</div>
+<div class="l">      Amazon                                   <span class="d">[No Folder]</span></div>
+<div class="l">      Reddit                                   <span class="d">[No Folder]</span></div>
+<div class="l"> </div>
+<div class="l"> </div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l" data-lift="weak">WEAK PASSWORDS (under 12 chars or 2 character classes or fewer)  (5)</div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l">Length matters more than symbols. Regenerate these at 20+ chars.</div>
+<div class="l"> </div>
+<div class="l">    8 chars, 2 class(es)  PayPal                                   <span class="d">[Financial]</span></div>
+<div class="l">    8 chars, 2 class(es)  Old Forum                                <span class="d">[No Folder]</span></div>
+<div class="l">   11 chars, 4 class(es)  Amazon                                   <span class="d">[No Folder]</span></div>
+<div class="l">   11 chars, 4 class(es)  Reddit                                   <span class="d">[No Folder]</span></div>
+<div class="l">   19 chars, 2 class(es)  Laptop recovery key                      <span class="d">[No Folder]</span></div>
+<div class="l"> </div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l"><span class="t">NO SECOND FACTOR ON A CRITICAL ACCOUNT  (2)</span></div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l">Bitwarden can store the TOTP seed itself - add it on the site, then paste the seed here.</div>
+<div class="l"> </div>
+<div class="l">  Personal mail                            <span class="d">[Email]</span></div>
+<div class="l">  PayPal                                   <span class="d">[Financial]</span></div>
+<div class="l"> </div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l" data-lift="fromurl"><span class="t">NO WEBSITE SET - AUTOFILL CANNOT WORK  (2)</span></div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l">Add the login URL to each so the browser extension offers to fill it.</div>
+<div class="l"> </div>
+<div class="l">  Laptop recovery key                      <span class="d">[No Folder]</span></div>
+<div class="l">  Corner Shop                              <span class="d">[No Folder]</span></div>
+<div class="l"> </div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l"><span class="t">NOT TOUCHED IN 3+ YEARS  (1)</span></div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l">Age alone is not a problem. Worth a look for dead accounts to delete.</div>
+<div class="l"> </div>
+<div class="l">   7.7 yrs  Old Forum                                <span class="d">[No Folder]</span></div>
+<div class="l"> </div>
+<div class="l"><span class="f">========================================================================</span></div>
+<div class="l lifted"><span data-lift="key">13 item(s) flagged. <span class="ok">Nothing was changed.</span></span></div>
+<div class="l">Highest value first: reused passwords, then no-2FA on critical accounts.</div>
+</body>

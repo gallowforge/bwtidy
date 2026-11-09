@@ -7,30 +7,24 @@ Regenerates the README images in docs/readme/.
    (tests/fake_lmstudio.py). It refuses to run if `bw` on PATH is anything
    but the fake, so it can never touch a real vault. The one network use is
    `bwdead.py --dns`, which resolves the synthetic vault's public domains.
-2. Compose: readme_scenes.py turns the captured output into one HTML page per
-   scene in docs/readme/src/, drawn with the key-board kit in readme_kit.py
-   (see docs/readme/IDENTITY.md). The pages are kept in the repo so every
-   image can be inspected.
-3. Render: headless Chrome screenshots each page at 2x and ImageMagick writes
-   the WebP. Every scene has a wide (2200 px) and a portrait (1080 px) version,
-   and social.png is the 1280x640 preview for the repository settings.
+2. Pages: the captured output is written word for word as terminal and
+   document pages in docs/readme/src/tex/, with the numbers the copy quotes.
+3. Glass: docs/readme/src/glass/glass.cjs renders the pages as frosted-glass
+   windows (three.js in headless Chromium), in a dark and a light version for
+   desktop and phone, as WebP, and the 1280x640 social.png.
 
-    python3 scripts/readme_visuals.py            # capture, compose, render
-    python3 scripts/readme_visuals.py --html     # capture and compose only
-    python3 scripts/readme_visuals.py --only hero,numbers
+    python3 scripts/readme_visuals.py                 # capture, pages, render
+    python3 scripts/readme_visuals.py --pages         # capture and pages only
     python3 scripts/readme_visuals.py --save-capture /tmp/cap.json
     python3 scripts/readme_visuals.py --load-capture /tmp/cap.json   # skip the runs
-    python3 scripts/readme_visuals.py --cards ../github-profile/docs  # profile cards only
 
---cards writes the GitHub profile card for this repo, in the same identity:
-<dir>/src/cards/bwtidy[-mobile].html and <dir>/cards/bwtidy[-mobile].webp
-(880x500 and 400x400 CSS px, rendered at 1.5x).
-
-Needs google-chrome-stable (or $CHROME) and ImageMagick's `magick`.
+Needs node with `playwright` and `three` (0.170) on NODE_PATH, ImageMagick and
+network access for the fonts.
 """
 
 import ast
 import glob
+import html
 import json
 import os
 import re
@@ -42,15 +36,13 @@ import tempfile
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TESTS = os.path.join(ROOT, "tests")
 FAKE_BW = os.path.join(TESTS, "bin", "bw")
-OUT = os.path.join(ROOT, "docs", "readme")
-SRC = os.path.join(OUT, "src")
-CHROME = os.environ.get("CHROME", "google-chrome-stable")
+TEX = os.path.join(ROOT, "docs", "readme", "src", "tex")
+ACCENT = "--hi:#6fe6d8;--hi-day:#0b7d72;--ok:#6fe6d8;--warn:#f0c674"
 sys.path.insert(0, TESTS)
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import fake_lmstudio  # noqa: E402
-from readme_scenes import cards, scenes  # noqa: E402
 
 WORKDIR = "~/bwtidy-work"
+e = html.escape
 
 
 # ==========================================================================
@@ -203,24 +195,127 @@ def facts(cap):
 
 
 # ==========================================================================
-# 3. render
+# 2. pages: terminals (dark in both themes) and documents (dark and light)
 # ==========================================================================
 
-def render(name, width, height, html_path, out_dir=OUT, scale=2):
-    tmp = tempfile.mkdtemp(prefix="bwtidy-shot-")
-    png = os.path.join(tmp, "shot.png")
-    subprocess.run([CHROME, "--headless=new", "--no-sandbox", "--disable-gpu", "--hide-scrollbars",
-                    f"--user-data-dir={os.path.join(tmp, 'profile')}", f"--force-device-scale-factor={scale}",
-                    "--virtual-time-budget=8000", "--default-background-color=00000000",
-                    f"--window-size={width},{height}", f"--screenshot={png}",
-                    "file://" + html_path], check=True, capture_output=True)
-    if name == "social":
-        subprocess.run(["magick", png, "-resize", "1280x640", "-strip",
-                        os.path.join(OUT, "social.png")], check=True)
-    else:
-        subprocess.run(["magick", png, "-strip", "-quality", "86",
-                        "-define", "webp:method=6", os.path.join(out_dir, f"{name}.webp")], check=True)
-    shutil.rmtree(tmp)
+def page(name, width, body, kind="term", theme="", size=None):
+    style = f"width:{width}px;{ACCENT}" + (f";font-size:{size}px" if size else "")
+    with open(os.path.join(TEX, name + ".html"), "w") as f:
+        f.write(f'<!doctype html><meta charset="utf-8"><link rel="stylesheet" href="tex.css">'
+                f'<body class="{kind} {theme}" style="{style}">\n{body}\n</body>\n')
+
+
+def prompt(cmd):
+    return f'<div class="l"><span class="p">$</span> <span class="c">{e(cmd)}</span></div>'
+
+
+def colour(line):
+    """The scripts print plain text; headings, verdicts and folders get the README palette."""
+    t = e(line)
+    if re.fullmatch(r"=+", line):
+        return f'<span class="f">{t}</span>'
+    if re.match(r"^[A-Z0-9][A-Z0-9 +&()\-,.']{6,}", line) and line.upper() == line:
+        return f'<span class="t">{t}</span>'
+    t = re.sub(r"(Nothing was (?:changed|deleted)\.)", r'<span class="ok">\1</span>', t)
+    t = re.sub(r"(PASS:)", r'<span class="ok">\1</span>', t)
+    t = re.sub(r"(&lt;&lt; includes a critical account)", r'<span class="w">\1</span>', t)
+    t = re.sub(r"(\[[A-Za-z &]+\])$", r'<span class="d">\1</span>', t)
+    return t
+
+
+def lines(text, lift=None, marks=None):
+    """One div per line; `lift` maps a line test to a data-lift name, `marks` a line test to a crop marker."""
+    out = []
+    for l in text.split("\n"):
+        name = next((n for test, n in (lift or {}).items() if test(l)), None)
+        mark = next((n for test, n in (marks or {}).items() if test(l)), None)
+        body = colour(l) or " "
+        if name:
+            pre = len(l) - len(l.lstrip(" "))
+            out.append(f'<div class="l lifted">{" " * pre}<span data-lift="{name}">{colour(l.lstrip(" "))}</span></div>')
+        elif mark:
+            out.append(f'<div class="l" data-lift="{mark}">{body}</div>')
+        else:
+            out.append(f'<div class="l">{body}</div>')
+    return "\n".join(out)
+
+
+def inline(s):
+    s = e(s)
+    s = re.sub(r"`([^`]+)`", r"<code>\1</code>", s)
+    return re.sub(r"\*\*([^*]+)\*\*", r"<b>\1</b>", s)
+
+
+def cleanup_doc(md, theme):
+    """cleanup.md, typeset: the checklist bwdead.py writes, with its evidence."""
+    out, src = [f'<div class="kick">{WORKDIR}/cleanup.md</div>'], md.rstrip("\n").split("\n")
+    i = 0
+    while i < len(src):
+        l = src[i]
+        if l.startswith("# "):
+            out.append(f"<h1>{inline(l[2:])}</h1>")
+        elif l.startswith("## "):
+            out.append(f"<h3>{inline(l[3:])}</h3>")
+        elif l.startswith("- [ ] "):
+            ev = src[i + 1].strip() if i + 1 < len(src) and src[i + 1].startswith("      ") else ""
+            out.append(f'<p style="margin:0 0 8px"><span class="box"></span>{inline(l[6:].rstrip())}'
+                       + (f'<br><span style="padding-left:20px;opacity:.7">{inline(ev)}</span>' if ev else "") + "</p>")
+            i += 1 if ev else 0
+        elif l.startswith("*") and l.endswith("*"):
+            out.append(f'<p style="opacity:.7"><i>{inline(l.strip("*"))}</i></p>')
+        elif l.strip():
+            out.append(f"<p>{inline(l)}</p>")
+        i += 1
+    page("cleanup" if theme == "dark" else "cleanup-light", 600, "\n".join(out), "doc", theme)
+
+
+def request_doc(cap, theme):
+    """What the model receives for one item, and what it must answer: the four fields, the schema's folders."""
+    line = next(l for l in cap["llm_lines"] if "name='Steam'" in l)
+    n = line.split(". ", 1)[0]
+    answer = cap["llm_answer"][int(n) - 1]
+    assert "password" not in line.lower() and answer["id"] in line
+    out = [f'<div class="kick">Sent to the model on 127.0.0.1, line {n} of {len(cap["llm_lines"])}</div>',
+           f'<div class="props" style="grid-template-columns:1fr;margin:22px 0 30px" data-lift="key"><span>{e(line)}</span></div>',
+           '<div class="kick">Its reply, checked against the schema</div>',
+           f'<div class="props" style="grid-template-columns:1fr"><span>{e(json.dumps(answer))}</span></div>',
+           f'<div class="kick">The only folders the schema allows ({len(cap["llm_enum"])})</div>',
+           f'<p class="mono" style="font-size:12.2px;line-height:1.7">{e(", ".join(cap["llm_enum"]))}</p>']
+    page("request" if theme == "dark" else "request-light", 560, "\n".join(out), "doc", theme)
+
+
+def pages(cap, f):
+    os.makedirs(TEX, exist_ok=True)
+    for x in os.listdir(TEX):
+        if x.endswith(".html"):
+            os.remove(os.path.join(TEX, x))
+    a = cap["audit"]
+    body = lines(a, lift={lambda l: re.match(r"^\d+ item\(s\) flagged", l): "key"},
+                 marks={lambda l: l.startswith("NO WEBSITE SET"): "fromurl", lambda l: l.startswith("WEAK PASSWORDS"): "weak"}).split("\n")
+    g = next(i for i, l in enumerate(a.split("\n")) if "includes a critical account" in l)   # the group with a critical account
+    body[g:g + 3] = ['<div class="lifted" style="margin:10px 0 22px"><div data-lift="group" style="display:inline-block">'
+                     + "".join(body[g:g + 3]) + "</div></div>"]
+    page("audit", 720, prompt("python3 bwaudit.py") + "\n" + "\n".join(body))
+    page("dupes", 720, prompt("python3 bwdupes.py") + "\n" + lines(cap["dupes"]))
+    page("dead", 600, prompt("python3 bwdead.py --dns") + "\n" + lines(cap["dead"], lift={lambda l: "flagged -> cleanup.md" in l: "key"}))
+    page("merge", 680, prompt("python3 bwmerge.py plan") + "\n" + lines(cap["merge_plan"]) + '\n<div class="gap"></div>\n'
+         + prompt("python3 bwmerge.py apply") + "\n" + lines(cap["merge_apply"]))
+    pol = cap["polish_head"].split("\n")
+    k = next(i for i, l in enumerate(pol) if "every URL preserved" in l)
+    block = "".join(f'<div class="l">{colour(l)}</div>' for l in pol[k:k + 3])
+    page("polish", 620, prompt("python3 bwpolish.py | head -8") + "\n" + lines("\n".join(pol[:k]))
+         + f'\n<div class="lifted" style="margin:14px 0 18px"><div data-lift="key" style="display:inline-block">{block}</div></div>')
+    page("plan", 560, prompt("python3 bwtidy.py plan") + "\n" + lines(cap["tidy_plan"]))
+    page("tidy", 600, prompt("python3 bwtidy.py apply | tail -1") + "\n" + lines(cap["tidy_apply_tail"]) + "\n"
+         + prompt("python3 bwtidy.py verify") + "\n" + lines(cap["tidy_verify"], lift={lambda l: l.startswith("PASS"): "key"}) + "\n"
+         + prompt("python3 bwtidy.py revert") + "\n" + lines(cap["tidy_revert"]))
+    page("guard", 620, prompt("LMSTUDIO_URL=http://203.0.113.10:1234/v1 python3 bwtidy.py plan") + "\n" + lines(cap["refuse"])
+         + '\n<div class="gap"></div>\n' + prompt("stat -c '%A  %n' plan.json fingerprint.json") + "\n" + lines(cap["modes"]))
+    for theme in ("dark", "light"):
+        cleanup_doc(cap["cleanup"], theme)
+        request_doc(cap, theme)
+    json.dump(f, open(os.path.join(TEX, "facts.json"), "w"), indent=1)
+    print("pages -> docs/readme/src/tex", json.dumps(f))
 
 
 def arg(flag):
@@ -228,7 +323,6 @@ def arg(flag):
 
 
 def main():
-    only = set(arg("--only").split(",")) if arg("--only") else None
     if arg("--load-capture"):
         with open(arg("--load-capture")) as fh:
             cap = json.load(fh)
@@ -237,29 +331,9 @@ def main():
     if arg("--save-capture"):
         with open(arg("--save-capture"), "w") as fh:
             json.dump(cap, fh)
-    f = facts(cap)
-    print("facts:", json.dumps(f))
-    if arg("--cards"):
-        base = os.path.abspath(arg("--cards"))
-        for name, (width, height, doc) in cards(cap, f).items():
-            path = os.path.join(base, "src", "cards", f"{name}.html")
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, "w") as fh:
-                fh.write(doc)
-            if "--html" not in sys.argv:
-                render(name, width, height, path, out_dir=os.path.join(base, "cards"), scale=1.5)
-                print("rendered card", name)
-        return
-    os.makedirs(SRC, exist_ok=True)
-    for name, (width, height, doc) in scenes(cap, f).items():
-        if only and name not in only:
-            continue
-        path = os.path.join(SRC, f"{name}.html")
-        with open(path, "w") as fh:
-            fh.write(doc)
-        if "--html" not in sys.argv:
-            render(name, width, height, path)
-            print("rendered", name)
+    pages(cap, facts(cap))
+    if "--pages" not in sys.argv:
+        subprocess.run(["node", os.path.join(ROOT, "docs", "readme", "src", "glass", "glass.cjs")], check=True)
 
 
 if __name__ == "__main__":

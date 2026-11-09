@@ -1,36 +1,15 @@
-# bwtidy: visual identity
+# bwtidy: the README's look
 
-**One idea.** Spring-cleaning a password vault: every key goes back on its own labelled hook.
+**Family.** The README is drawn in Glass, the language of the gallowforge profile: real output as frosted-glass windows floating in a dark, softly lit space, with the one line that matters lifted out of its window toward you. aih, agent-guardrails and bwtidy share the renderer, the type and the composition grammar; each has its own accent light.
 
-**Signature concept.** A key board in a brushed-steel cabinet. Every vault item is a brass key, drawn the same way in every image. How it looks comes from the real audit output:
+**The idea.** Find everything, change nothing until you say so. The hero shows the end of a real audit with its last line lifted out: 13 items flagged, nothing changed. Each panel lifts the proof of one step: the risky group, the checklist summary, the merge integrity check, the four fields the model sees, the byte-for-byte verify.
 
-| In the vault | On the board |
-| --- | --- |
-| Reused password | the same cut and the same stamp, hanging on several hooks |
-| Weak password | a thin, bent, dull key |
-| No 2FA on a critical login | a lock plate missing its second bolt (github.com, the only login with TOTP, has both) |
-| No website | a tag with a blank address |
-| Untouched for years | a cobweb, spider included |
-| Dead entries | the lost-and-found box, one compartment per cleanup tier |
-| Duplicates | two identical keys on one ring |
-| Folders | tidy labelled rails |
-| Plan, review, apply, verify | a chore card with pencil ticks; undo is a brass luggage tag |
-| Headline numbers | hotel key fobs |
+**Accent.** Teal, the colour of "Nothing was changed": `#6fe6d8` on dark windows, `#0b7d72` on light pages, and a pool of `#12907f` light behind the glass. Amber appears once, where the audit itself warns about a critical account.
 
-Real output always sits on dark vault-steel plates. The friend's notes are pencil on kraft tags, and names are printed on label-maker tape.
+**Type.** Geist for headings and copy, Geist Mono for every line of output.
 
-**Type.** One family, Recursive, used in three voices. Casual (heavy) is for headlines and pencil notes: the cheeky friend. Linear is for body text: the facts. Mono is for real terminal output. Using one family says the friend and the machine speak the same language. It also keeps the product clear of the portfolio's old Inter and JetBrains Mono template.
+**Themes.** Each image has a dark version (on GitHub's `#0d1117`) and a light one (on `#ffffff`), with phone crops; the edges dissolve into the page. Terminals stay dark in both themes; `cleanup.md` and the model request are dark pages in the dark version and light pages in the light one.
 
-**Palette (60/30/10).**
-- Mint, the painted board: `#b6e2cd`, with highlight `#d3efe1`, shade `#86c6ab` and ink `#1f5442`.
-- Vault steel, for plates, ink, frame and rails: `#162024`, `#465860`, `#c8d2d7`.
-- Brass, kept for keys and the undo tag: `#d6a64a`, with highlight `#f7df9e` and shadow `#6e4f17`.
-- Kraft `#e9d8b4` and pencil `#2c3a35` for the notes. Coral `#e9846b` appears only on a missing bolt and on "trashed:".
+**Truth.** `scripts/readme_visuals.py` runs the scripts on the synthetic vault in `examples/` through the fake `bw` and the stand-in model, and refuses to run if `bw` is anything but the fake. Their output is written word for word into `docs/readme/src/tex/`; long reports are shown the way a terminal window would, scrolled to the top or the bottom. Every number in the copy is counted from the scripts, the tests or that output.
 
-**Voice.** Cheeky and reassuring, a tidy friend who never judges: "13 findings. Zero judgement." "Fourteen keys on one hook?" "The hook would like a word."
-
-**Composition.** Every image is the same cabinet: a steel frame with four screws around a mint panel, lit from the top left with shadows falling down and to the right. The headline sits top left in Casual. The real output sits on a steel plate, and the drawing tells the same story with objects.
-
-**For careful viewers.** The spider on Old Forum's cobweb, the lone sock in the lost-and-found box, "do not disturb" on the zero-calls-out fob, and github.com, the only key with both bolts.
-
-Built by `scripts/readme_kit.py` (the drawing kit) and `scripts/readme_scenes.py` (one function per image).
+**Rebuild.** `python3 scripts/readme_visuals.py`. The renderer is `docs/readme/src/glass/`: `scene.js` (three.js compositor), `grammar.js` (light, glass, type and compositions), `layouts.js` (this README's scenes) and `glass.cjs` (textures, scenes and WebP).
