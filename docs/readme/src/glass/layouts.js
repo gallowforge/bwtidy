@@ -1,7 +1,7 @@
 // bwtidy in Glass: every composition of the README. The windows show real output of the scripts on
 // the synthetic vault in examples/ (see scripts/readme_visuals.py). The accent light is teal, the
 // colour of "Nothing was changed".
-import { lights, term, doc, lift, hero, heroPhone, panel, panelPhone, band, bandPhone, social } from './grammar.js';
+import { lights, term, doc, lift, hero, heroPhone, panel, panelPhone, band, bandPhone, social, replay } from './grammar.js';
 
 const A = { ray: '#b2e8de', pool: '#12907f', deep: '#0f3a35', lift: '#1aa894', top: '#0a0d10', haze: '#17201f', fog: '#0a0d0f',
   mote: '#dcfff6', day: '#f0f4f3', shade: '#eaefee', dayFog: '#f0f4f3' };
@@ -14,6 +14,8 @@ export function build(M) {
   const top = [0, 0, au.w, au.lift.weak[1] - 40], tail = [0, cut, au.w, au.h - cut];
   const HERO = {
     name: 'bwtidy', h: 600, hp: 640,
+    // the loop: the audit is run, its report goes by and stops on the summary the window shows
+    replay: replay(au, { frames: 96, view: [cut, au.h - cut], page: 0.5, burst: 2, calm: 12, pause: 0 }),
     line: 'A local audit and cleanup for Bitwarden and Vaultwarden, with an undo for every change.',
     linePhone: 'A local audit and cleanup for Bitwarden<br>and Vaultwarden, with an undo for every change.',
     win: (n, ph) => {
@@ -24,7 +26,7 @@ export function build(M) {
       return [
         term(M, 'tidy', P.s, n, A, { ...far }),
         doc(M, 'cleanup', P.d, n, A, { ...far, breathe: [14, 0.7] }),
-        term(M, 'audit', P.m, n, A, { crop: tail, breathe: [10, 0.4], bezel: 10, glow: 0.75 }),
+        term(M, 'audit', P.m, n, A, { play: true, crop: tail, breathe: [10, 0.4], bezel: 10, glow: 0.75 }),
         lift(M, 2, 'audit', 'key', n, A, { lift: ph ? 60 : 96, grow: ph ? 1.0 : 1.06, breathe: [12, 0.85], shift: [0, ph ? 8 : 12] }),
       ];
     },

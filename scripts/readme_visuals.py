@@ -11,15 +11,17 @@ Regenerates the README images in docs/readme/.
    document pages in docs/readme/src/tex/, with the numbers the copy quotes.
 3. Glass: docs/readme/src/glass/glass.cjs renders the pages as frosted-glass
    windows (three.js in headless Chromium), in a dark and a light version for
-   desktop and phone, as WebP, and the 1280x640 social.png.
+   desktop and phone, as WebP, and the 1280x640 social.png. The hero is a loop
+   in which the audit is typed and its report goes by; every other image is a
+   still.
 
     python3 scripts/readme_visuals.py                 # capture, pages, render
     python3 scripts/readme_visuals.py --pages         # capture and pages only
     python3 scripts/readme_visuals.py --save-capture /tmp/cap.json
     python3 scripts/readme_visuals.py --load-capture /tmp/cap.json   # skip the runs
 
-Needs node with `playwright` and `three` (0.170) on NODE_PATH, ImageMagick and
-network access for the fonts.
+Needs node with `playwright` and `three` (0.170) on NODE_PATH, ImageMagick,
+ffmpeg and network access for the fonts.
 """
 
 import ast

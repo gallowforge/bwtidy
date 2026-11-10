@@ -2,7 +2,7 @@
 
 **Family.** The README is drawn in Glass, the language of the gallowforge profile: real output as frosted-glass windows floating in a dark, softly lit space, with the one line that matters lifted out of its window toward you. aih, agent-guardrails and bwtidy share the renderer, the type and the composition grammar; each has its own accent light.
 
-**The idea.** Find everything, change nothing until you say so. The hero shows the end of a real audit with its last line lifted out: 13 items flagged, nothing changed. Each panel lifts the proof of one step: the risky group, the checklist summary, the merge integrity check, the four fields the model sees, the byte-for-byte verify.
+**The idea.** Find everything, change nothing until you say so. The hero shows the end of a real audit with its last line lifted out: 13 items flagged, nothing changed. It plays as a loop: the command is typed, the report goes by half a window at a time and the last line lifts. The loop starts on the finished output and holds it, so a paused image is the whole picture. Each panel lifts the proof of one step: the risky group, the checklist summary, the merge integrity check, the four fields the model sees, the byte-for-byte verify.
 
 **Accent.** Teal, the colour of "Nothing was changed": `#6fe6d8` on dark windows, `#0b7d72` on light pages, and a pool of `#12907f` light behind the glass. Amber appears once, where the audit itself warns about a critical account.
 
@@ -12,4 +12,4 @@
 
 **Truth.** `scripts/readme_visuals.py` runs the scripts on the synthetic vault in `examples/` through the fake `bw` and the stand-in model, and refuses to run if `bw` is anything but the fake. Their output is written word for word into `docs/readme/src/tex/`; long reports are shown the way a terminal window would, scrolled to the top or the bottom. Every number in the copy is counted from the scripts, the tests or that output.
 
-**Rebuild.** `python3 scripts/readme_visuals.py`. The renderer is `docs/readme/src/glass/`: `scene.js` (three.js compositor), `grammar.js` (light, glass, type and compositions), `layouts.js` (this README's scenes) and `glass.cjs` (textures, scenes and WebP).
+**Rebuild.** `python3 scripts/readme_visuals.py`. The renderer is `docs/readme/src/glass/`: `scene.js` (three.js compositor), `grammar.js` (light, glass, type and compositions), `layouts.js` (this README's scenes) and `glass.cjs` (textures, scenes and WebP; the hero loop is 96 frames, 8 seconds, encoded with ffmpeg). `ONLY=hero node docs/readme/src/glass/glass.cjs scenes` renders the hero alone.
