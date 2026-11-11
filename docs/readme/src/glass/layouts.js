@@ -40,12 +40,12 @@ export function build(M) {
       return [
         term(M, 'audit', P.a, n, A, { crop: top, breathe: [8, 0.0] }),
         term(M, 'dupes', P.b, n, A, { breathe: [8, 0.45] }),
-        lift(M, 0, 'audit', 'group', n, A, { lift: 170, shift: [ph ? 0 : -22, 4] }),
+        lift(M, 0, 'audit', 'group', n, A, { lift: 170, shift: [ph ? 50 : -22, 4] }),
       ];
     },
   };
   const DEAD = {
-    kick: 'Clean-up', head: 'Find the dead weight',
+    kick: 'Clean-up', head: 'Find the dead weight', hp: 612, dyp: 10,
     body: '<code>bwdead.py</code> writes a ranked checklist with the evidence for every entry: exact duplicates first, then domains that no longer resolve. It deletes nothing; you tick through it in the Bitwarden app.',
     win: (n, ph) => {
       const P = ph ? { a: { x: 156, y: 394, w: 240, z: -90, rot: [2, -12, 0] }, b: { x: 232, y: 486, w: 280, z: 60, rot: [0, -12, 0] } }
